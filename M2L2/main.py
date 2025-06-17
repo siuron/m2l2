@@ -3,7 +3,7 @@ import os
 import random
 
 print(os.listdir('images'))
-bot = telebot.TeleBot("8122935038:AAFOtV7uLe5J-Xao5ussiXjE9Ap0PeaC7dc")
+bot = telebot.TeleBot("your token here")
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
