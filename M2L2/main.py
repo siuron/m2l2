@@ -1,28 +1,40 @@
 import telebot
-import os
-import random
 
-print(os.listdir('images'))
-bot = telebot.TeleBot("your token here")
+# Замените 'YOUR_BOT_TOKEN' на токен вашего бота
+BOT_TOKEN = 'YOUR_BOT_TOKEN'
+bot = telebot.TeleBot(BOT_TOKEN)
 
+# Обработчик команды /start
 @bot.message_handler(commands=['start'])
-def send_welcome(message):
-    bot.reply_to(message, "Привет! Я твой Telegram бот который тебе поможет сохранить природу")
+def start(message):
+    bot.reply_to(message, "Привет! Я бот, который поможет тебе сохранять природу. Используй /help, чтобы узнать больше.")
 
-@bot.message_handler(commands=['and?'])
-def send_hello(message):
-    bot.reply_to(message, "тебе нужно не кидать мусор по сторонам?")
+# Обработчик команды /help
+@bot.message_handler(commands=['help'])
+def help(message):
+    help_text = """
+    Вот что я могу:
+    /tips - Получить советы по сохранению природы.
+    /actions - Узнать о текущих экологических акциях.
+    """
+    bot.reply_to(message, help_text)
 
-@bot.message_handler(commands=['bye'])
-def send_bye(message):
-    bot.reply_to(message, "надеюсь ты понял что нудно делать!")
+# Обработчик команды /tips
+@bot.message_handler(commands=['tips'])
+def tips(message):
+    tips_list = [
+        "Экономьте воду: закрывайте кран, когда чистите зубы.",
+        "Используйте многоразовые сумки вместо пластиковых пакетов.",
+        "Сортируйте мусор для переработки.",
+        "Выключайте свет, когда выходите из комнаты."
+    ]
+    bot.reply_to(message, tips_list[0])  
 
+# Обработчик команды /actions
+@bot.message_handler(commands=['actions'])
+def actions(message):
+    actions_text = "К сожалению, сейчас нет активных экологических акций. Но вы можете начать с малого: посадите дерево или уберите мусор в парке!"
+    bot.reply_to(message, actions_text)
 
-@bot.message_handler(commands=['mem'])
-def send_mem(message):
-    images = os.listdir("images")
-    img_name = random.choice(images)
-    with open(f'images/{img_name}', 'rb') as f:  
-        bot.send_photo(message.chat.id, f)    
-
-bot.polling()
+# Запуск бота
+bot.infinity_polling()
